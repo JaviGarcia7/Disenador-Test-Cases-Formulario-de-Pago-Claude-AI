@@ -1,7 +1,7 @@
 """Guardrails de entrada/salida: validación y enmascaramiento de datos sensibles"""
 
 import re
-from typing import Any
+from typing import Any, Optional
 from src.types import TestCase, EdgeCase
 
 
