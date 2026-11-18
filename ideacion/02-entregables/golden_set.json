@@ -1,0 +1,187 @@
+{
+  "historia_usuario": "HU-001: Formulario de Pago Completo",
+  "descripcion": "COMO Usuario del sitio web, QUIERO Completar un formulario de pago ingresando mis datos de facturación y de tarjeta, PARA Poder finalizar mi compra de forma segura y adquirir el producto.",
+  "campos_globales": [
+    "Titular de la tarjeta",
+    "Número de tarjeta",
+    "Fecha de expiración (MM/AA)",
+    "Código de seguridad (CVV)"
+  ],
+  "golden_set": [
+    {
+      "id": "GS-001",
+      "scenario_id": "Escenario 1",
+      "title": "Pago exitoso con tarjeta de crédito/débito válida",
+      "edge_case_covered": "Happy path - flujo exitoso",
+      "criticidad": "High",
+      "test_steps": [
+        {
+          "step": 1,
+          "action": "Acceder al formulario de pago",
+          "expected": "Formulario visible con todos los campos vacíos"
+        },
+        {
+          "step": 2,
+          "action": "Ingrese titular: 'Juan Pérez'",
+          "expected": "Campo acepta texto con espacios"
+        },
+        {
+          "step": 3,
+          "action": "Ingrese número de tarjeta válido de 16 dígitos: '4111111111111111'",
+          "expected": "Campo acepta 16 dígitos"
+        },
+        {
+          "step": 4,
+          "action": "Ingrese fecha de expiración futura: '12/29'",
+          "expected": "Campo acepta formato MM/AA"
+        },
+        {
+          "step": 5,
+          "action": "Ingrese CVV válido de 3 dígitos: '123'",
+          "expected": "Campo acepta 3 dígitos"
+        },
+        {
+          "step": 6,
+          "action": "Haga clic en botón 'Confirmar Pago'",
+          "expected": "Pantalla de confirmación con mensaje 'Pago procesado con éxito' e ID de orden"
+        }
+      ]
+    },
+    {
+      "id": "GS-002",
+      "scenario_id": "Escenario 2",
+      "title": "Intento de pago con campos obligatorios vacíos",
+      "edge_case_covered": "Validación de campos obligatorios - entrada vacía",
+      "criticidad": "High",
+      "test_steps": [
+        {
+          "step": 1,
+          "action": "Acceder al formulario de pago",
+          "expected": "Formulario visible con todos los campos vacíos"
+        },
+        {
+          "step": 2,
+          "action": "Haga clic en botón 'Confirmar Pago' sin completar campos",
+          "expected": "Sistema no procesa el pago"
+        },
+        {
+          "step": 3,
+          "action": "Verifique mensajes de error",
+          "expected": "Cada campo muestra 'Este campo es obligatorio'"
+        }
+      ]
+    },
+    {
+      "id": "GS-003",
+      "scenario_id": "Escenario 3",
+      "title": "Intento de pago con tarjeta expirada",
+      "edge_case_covered": "Validación de negocio - fecha de expiración pasada",
+      "criticidad": "High",
+      "test_steps": [
+        {
+          "step": 1,
+          "action": "Acceder al formulario de pago",
+          "expected": "Formulario visible"
+        },
+        {
+          "step": 2,
+          "action": "Complete campos: titular 'Test User', tarjeta '4111111111111111', expiración '05/23' (pasada), CVV '123'",
+          "expected": "Todos los campos aceptan valores"
+        },
+        {
+          "step": 3,
+          "action": "Haga clic en botón 'Confirmar Pago'",
+          "expected": "Sistema rechaza transacción con mensaje 'La tarjeta ingresada está expirada. Por favor, usa otra tarjeta'"
+        }
+      ]
+    },
+    {
+      "id": "GS-004",
+      "scenario_id": "Escenario 4",
+      "title": "Validación de formato incorrecto en el número de tarjeta",
+      "edge_case_covered": "Validación de formato - caracteres no numéricos, longitud insuficiente",
+      "criticidad": "High",
+      "test_steps": [
+        {
+          "step": 1,
+          "action": "Acceder al formulario de pago",
+          "expected": "Formulario visible"
+        },
+        {
+          "step": 2,
+          "action": "Ingrese número de tarjeta con caracteres alfabéticos: '4111AAAA2222BBBB'",
+          "expected": "Sistema activa validación en tiempo real"
+        },
+        {
+          "step": 3,
+          "action": "Observe mensaje de error",
+          "expected": "Mensaje 'Número de tarjeta inválido. Debe contener solo números y tener entre 15 y 16 dígitos'"
+        },
+        {
+          "step": 4,
+          "action": "Ingrese número de tarjeta con menos de 15 dígitos: '411111111111'",
+          "expected": "Sistema muestra mensaje de error similar"
+        }
+      ]
+    },
+    {
+      "id": "GS-005",
+      "scenario_id": "Escenario 5",
+      "title": "Validación de formato incorrecto en el código de seguridad (CVV)",
+      "edge_case_covered": "Validación de formato - CVV longitud incorrecta, caracteres no numéricos",
+      "criticidad": "Medium",
+      "test_steps": [
+        {
+          "step": 1,
+          "action": "Acceder al formulario de pago",
+          "expected": "Formulario visible"
+        },
+        {
+          "step": 2,
+          "action": "Ingrese CVV de solo 2 dígitos: '12'",
+          "expected": "Sistema valida y muestra error"
+        },
+        {
+          "step": 3,
+          "action": "Observe mensaje de error",
+          "expected": "Mensaje 'El código CVV debe ser de 3 o 4 dígitos numéricos'"
+        },
+        {
+          "step": 4,
+          "action": "Ingrese CVV con letras: '12A'",
+          "expected": "Sistema muestra mensaje de error similar"
+        }
+      ]
+    },
+    {
+      "id": "GS-006",
+      "scenario_id": "Escenario 6",
+      "title": "Simulación de fondos insuficientes (Prueba de respuesta del Gateway)",
+      "edge_case_covered": "Respuesta del gateway de pago - fondos insuficientes",
+      "criticidad": "High",
+      "entorno": "Staging/Sandbox",
+      "test_steps": [
+        {
+          "step": 1,
+          "action": "Acceder al formulario de pago en entorno Staging",
+          "expected": "Formulario visible"
+        },
+        {
+          "step": 2,
+          "action": "Complete formulario con tarjeta de prueba para fondos insuficientes terminada en 0005: '4111111111110005'",
+          "expected": "Campos aceptan valores"
+        },
+        {
+          "step": 3,
+          "action": "Haga clic en botón 'Confirmar Pago'",
+          "expected": "Sistema registra rechazo de la pasarela"
+        },
+        {
+          "step": 4,
+          "action": "Observe mensaje al usuario",
+          "expected": "Mensaje 'Transacción rechazada: Fondos insuficientes. Por favor, intente con otro método de pago'"
+        }
+      ]
+    }
+  ]
+}
