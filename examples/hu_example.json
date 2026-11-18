@@ -1,0 +1,34 @@
+{
+  "id": "HU-PAGO-001",
+  "descripcion": "Como cliente de e-commerce, QUIERO completar un formulario de pago ingresando mis datos de tarjeta, PARA poder finalizar mi compra de forma segura y recibir mi producto",
+  "campos": [
+    {
+      "nombre": "Titular",
+      "tipo": "texto",
+      "restricciones": "Máximo 50 caracteres, solo letras espacios y guiones",
+      "ejemplo_valido": "Juan Pérez",
+      "ejemplo_invalido": "Juan123"
+    },
+    {
+      "nombre": "Número de tarjeta",
+      "tipo": "monetario",
+      "restricciones": "15-16 dígitos, validación Luhn",
+      "ejemplo_valido": "4111111111111111",
+      "ejemplo_invalido": "1234567890123456"
+    },
+    {
+      "nombre": "Fecha de expiración",
+      "tipo": "fecha",
+      "restricciones": "Formato MM/YY, debe ser futura",
+      "ejemplo_valido": "12/29",
+      "ejemplo_invalido": "05/23"
+    },
+    {
+      "nombre": "CVV",
+      "tipo": "texto",
+      "restricciones": "3-4 dígitos numéricos",
+      "ejemplo_valido": "123",
+      "ejemplo_invalido": "12"
+    }
+  ]
+}
